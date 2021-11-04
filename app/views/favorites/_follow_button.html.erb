@@ -1,0 +1,13 @@
+<% unless current_user == user %>
+  <% if current_user.favoriteing?(user) %>
+    <%= form_with(model: current_user.favorites.find_by(favorite_id: user.id), method: :delete) do |f| %>
+      <%= hidden_field_tag :micropost_id, user.id %>
+      <%= f.submit 'Unfavorite', class: 'btn btn-danger w-100' %>
+    <% end %>
+  <% else %>
+    <%= form_with(model: current_user.favorites.build) do |f| %>
+      <%= hidden_field_tag :micropost_id, user.id %>
+      <%= f.submit 'Favorite', class: 'btn btn-primary w-100' %>
+    <% end %>
+  <% end %>
+<% end %>
