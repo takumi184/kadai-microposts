@@ -14,9 +14,10 @@ class User < ApplicationRecord
   has_many :followers, through: :reverses_of_relationship, source: :user
   
   has_many :favorites
-  has_many :likings, through: :favorites, source: :micropost
+  has_many :likes, through: :favorites, source: :micropost
   has_many :reverses_of_favorite, class_name: 'Favorite', foreign_key: 'micropost_id'
-  has_many :likers, through: :reverses_of_favorite, source: :user
+  
+  
   
   def follow(other_user)
     unless self == other_user
@@ -44,8 +45,12 @@ class User < ApplicationRecord
     favorite.destroy if favorite
   end
 
-  def likings?(other_user)
-    self.likings.include?(other_user)
+  def likes?(other_user)
+    self.likes.include?(other_user)
+  end
+  
+  def feed_microposts
+    Micropost.where(user_id: self.following_ids + [self.id])
   end
   
 end
